@@ -2,61 +2,35 @@
 namespace api\controllers;
 
 use Yii;
-use yii\web\Controller;
-use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
+use yii\filters\auth\CompositeAuth;
+use yii\filters\auth\HttpBasicAuth;
+use yii\filters\auth\HttpBearerAuth;
+use yii\filters\auth\QueryParamAuth;
+use yii\rest\ActiveController;
 
 /**
  * Site controller
  */
-class ApiController extends Controller
+class ApiController extends ActiveController
 {
+
     /**
      * @inheritdoc
      */
-//     public function behaviors()
-//     {
-//         return [
-//             'access' => [
-//                 'class' => AccessControl::className(),
-//                 'rules' => [
-//                     [
-//                         'actions' => ['login', 'error'],
-//                         'allow' => true,
-//                     ],
-//                     [
-//                         'actions' => ['logout', 'index'],
-//                         'allow' => true,
-//                         'roles' => ['@'],
-//                     ],
-//                 ],
-//             ],
-//             'verbs' => [
-//                 'class' => VerbFilter::className(),
-//                 'actions' => [
-//                     'logout' => ['post'],
-//                 ],
-//             ],
-//         ];
-//     }
-
-    public function actionIndex()
+    public function behaviors()
     {
-        return "index";
-    }
-
-    public function actionLogin()
-    {
-        return "need login";
-    }
-
-    public function actionLogout()
-    {
-        return "log out";
-    }
-    
-    public function actionError()
-    {
-        return "error";
+        $behaviors = parent::behaviors();
+        $behaviors['authenticator'] = [
+            'class' => CompositeAuth::className(),
+            'authMethods' => [
+                HttpBasicAuth::className(),
+                HttpBearerAuth::className(),
+                QueryParamAuth::className()
+            ]
+        ];
+        
+        $behaviors['rateLimiter']['enableRateLimitHeaders'] = true;
+        
+        return $behaviors;
     }
 }

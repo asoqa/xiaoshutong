@@ -8,14 +8,18 @@ return [
     'bootstrap' => [
         'log'
     ],
-    'modules' => [],
+    'modules' => [
+        'v1' => [
+            // 'basePath' => '@app/modules/v1'
+            'class' => 'api\modules\v1\Module'
+        ]
+    ],
     'components' => [
         'user' => [
             'identityClass' => 'common\models\User',
             'enableAutoLogin' => true,
-            'loginUrl' => [
-                '/api/login'
-            ]
+            'enableSession' => false,
+            'loginUrl' => null
         ],
         
         // 'enableAutoLogin' => true,
@@ -31,13 +35,22 @@ return [
                 ]
             ]
         ],
-        'errorHandler' => [
-            'errorAction' => 'api/error'
-        ],
+        
+        // 'errorHandler' => [
+        // 'errorAction' => 'api/error'
+        // ],
         'urlManager' => [
             'enablePrettyUrl' => true,
+            'enableStrictParsing' => true,
             'showScriptName' => false,
-            'rules' => []
+            'rules' => [
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'v1/user'
+                ]
+                // '<module:\w+>/<controller:\w+>/<action:\wd+>' => '<module>/<controller>/<action>'
+                
+            ]
         ]
     ],
     'params' => $params
