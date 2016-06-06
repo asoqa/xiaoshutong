@@ -1,6 +1,5 @@
 # Composer files
 composer.phar
-vendor/
 
 # Local configs
 config/autoload/*.local.php
@@ -20,6 +19,7 @@ demos/
 extras/documentation
 
 frontend/runtime/
+api/runtime/
 
 .buildpath
 .project
