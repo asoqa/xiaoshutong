@@ -1,4 +1,5 @@
 # Composer files
+vendor/
 composer.phar
 
 # Local configs
